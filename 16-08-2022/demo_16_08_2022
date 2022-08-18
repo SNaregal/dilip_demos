@@ -1,0 +1,97 @@
+app.get('/getUserById/:id',(req,res) => {
+    mysql.query(query,(result,err) => {
+        mysql.query('select * from channels_subscribed',(result,err) => {
+            mysql.query('select * from channels_subscribed where country = 'IN',(result,err) => {
+                res.send(result)
+            })
+        })
+    })
+})
+
+
+
+
+get request hit to /getUserById/:id
+
+let getUserInfo = function(userId){
+    new Promise(function(resolve,reject){
+        mysql.query('select user info where userid = ${userId}',(result, err) => {
+            if(!err){
+                resolve(result)   
+            }else{
+                reject(err.sqlMessage)
+            }
+        })
+    })
+}
+
+let getUserChannelsSubscribed = function(subscriptID){
+    return new Promise(function(resolve,reject){
+        mysql.query('get user channels_subscribed where subid = ${subscriptID}',(result,err) => {
+            if(err){
+                reject(err.sqlMessage)
+            }else{
+                resolve(result)
+            }
+        })
+    })
+}
+
+let getUserChannelsSubscribedIN = function(countryCode){
+    return new Promise(function(resolve,reject){
+        mysql.query('get user channels_subscribed where country = ${countryCode}',(result,err) => {
+            if(err){
+                reject(err.sqlMessage)
+            }else{
+                resolve(result)
+            }
+        })
+    })
+}
+
+
+app.get('/getUserById/:id',(req,res) => {
+    getUserById(id)
+    .then( data => {
+        getUserChannelsSubscribed(data.subscriptID)
+    })
+    .then( data => {
+        getUserChannelsSubscribedIN(data.countryCode)
+    })
+    .then( data => {
+        res.send(data)
+    })
+})
+
+
+
+
+
+
+query User Info
+query user channels_subscribed
+query user channels_subscribed_IN
+
+Non Blocking, synchronus, single threaded
+
+
+sync oprn
+sync oprn
+sync oprn
+sync oprn
+sync oprn
+async oprn1 (user input, network request, event completion)
+sync oprn
+sync oprn
+sync oprn
+async oprn2 (user input, network request, event completion)
+sync oprn
+sync oprn
+sync oprn
+async oprn1
+async oprn2
+
+
+event loop
+
+EVENT QUEUE []
