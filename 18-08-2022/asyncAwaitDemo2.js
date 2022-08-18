@@ -1,3 +1,6 @@
+//ANY ASYNC FUNCTION ALWAYS RETURNS A PROMISE AND NOT NORMAL VALUES
+
+
 let a = 2
 let b = 3
 
@@ -24,8 +27,9 @@ async function showVals(){
     let oddSq
     try{
         evenSq = await getEvenSq(2)
-        console.log(evenSq)
+        // console.log(evenSq)
     }catch(err){
+        evenSq = 0
         console.log(err)
     }
     finally{
@@ -33,14 +37,28 @@ async function showVals(){
     }
 
     try{
-        oddSq = await getOddSq(evenSq)
-        console.log(oddSq)
+        oddSq = await getOddSq(5)
+        // console.log(oddSq)
     }catch(err){
+        oddSq = 0
         console.log(err)
     }
     finally{
         console.log("Finally of Odd")
     }
+
+    return evenSq + oddSq
+
 }
 
 showVals()
+.then(data => console.log(data))
+
+
+
+// async function asyncFn2 () {
+//     let res = await showVals()
+//     console.log(res)
+// }
+
+// asyncFn2()
